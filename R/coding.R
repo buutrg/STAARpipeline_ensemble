@@ -119,8 +119,9 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	################################################
 	#                  plof_ds
 	################################################
-	variant.id.gene <- seqGetData(genofile, "variant.id")
+	# variant.id.gene <- seqGetData(genofile, "variant.id")
 	lof.in.plof <- (GENCODE.EXONIC.Category=="stopgain")|(GENCODE.EXONIC.Category=="stoploss")|(GENCODE.Category=="splicing")|(GENCODE.Category=="exonic;splicing")|(GENCODE.Category=="ncRNA_splicing")|(GENCODE.Category=="ncRNA_exonic;splicing")|((GENCODE.EXONIC.Category=="nonsynonymous SNV")&(MetaSVM_pred=="D"))
+
 	variant.id.gene.category <- variant.id.gene[lof.in.plof]
 
 	seqSetFilter(genofile,variant.id=variant.id.gene.category,sample.id=phenotype.id)
@@ -137,6 +138,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	## Genotype
 	Geno <- seqGetData(genofile, "$dosage")
 	Geno <- Geno[id.genotype.match,,drop=FALSE]
+	# str(Geno)
 
 	## impute missing
 	if(!is.null(dim(Geno)))
@@ -174,17 +176,38 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 	results_plof_ds <- c()
 	if(inherits(pvalues, "list"))
 	{
+
 		results_temp <- as.vector(genes[kk,])
 		results_temp[3] <- "plof_ds"
 		results_temp[2] <- chr
 		results_temp[1] <- as.character(genes[kk,1])
 		results_temp[4] <- pvalues$num_variant
 
+		results_STAAR_S_1_25 = unlist(pvalues$results_STAAR_S_1_25)
+		results_STAAR_S_1_1 = unlist(pvalues$results_STAAR_S_1_1)
+		results_STAAR_B_1_25 = unlist(pvalues$results_STAAR_B_1_25)
+		results_STAAR_B_1_1 = unlist(pvalues$results_STAAR_B_1_1)
+		results_STAAR_A_1_25 = unlist(pvalues$results_STAAR_A_1_25)
+		results_STAAR_A_1_1 = unlist(pvalues$results_STAAR_A_1_1)
+		results_ACAT_O = pvalues$results_ACAT_O
+		results_STAAR_O = pvalues$results_STAAR_O
+
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+
+			results_temp = c(
+				results_temp,
+				cMAC = pvalues$cMAC,
+				results_STAAR_S_1_25,
+				results_STAAR_S_1_1,
+				results_STAAR_B_1_25,
+				results_STAAR_B_1_1,
+				results_STAAR_A_1_25,
+				results_STAAR_A_1_1,
+				ACAT_O = results_ACAT_O,
+				STAAR_O = results_STAAR_O
+			)
+
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
@@ -265,6 +288,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		try(pvalues <- MultiSTAAR(Geno,obj_nullmodel,Anno.Int.PHRED.sub.category,rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff),silent=silent)
 	}
 
+
 	results_plof <- c()
 	if(inherits(pvalues, "list"))
 	{
@@ -276,9 +300,20 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+
+			results_temp = c(
+				results_temp,
+				cMAC = pvalues$cMAC,
+				results_STAAR_S_1_25,
+				results_STAAR_S_1_1,
+				results_STAAR_B_1_25,
+				results_STAAR_B_1_1,
+				results_STAAR_A_1_25,
+				results_STAAR_A_1_1,
+				ACAT_O = results_ACAT_O,
+				STAAR_O = results_STAAR_O
+			)
+
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
@@ -368,9 +403,20 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+
+			results_temp = c(
+				results_temp,
+				cMAC = pvalues$cMAC,
+				results_STAAR_S_1_25,
+				results_STAAR_S_1_1,
+				results_STAAR_B_1_25,
+				results_STAAR_B_1_1,
+				results_STAAR_A_1_25,
+				results_STAAR_A_1_1,
+				ACAT_O = results_ACAT_O,
+				STAAR_O = results_STAAR_O
+			)
+
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
@@ -378,6 +424,7 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 		}
 
 		results_synonymous <- rbind(results_synonymous,results_temp)
+
 	}
 
 	if(!is.null(results_synonymous))
@@ -461,9 +508,20 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+
+			results_temp = c(
+				results_temp,
+				cMAC = pvalues$cMAC,
+				results_STAAR_S_1_25,
+				results_STAAR_S_1_1,
+				results_STAAR_B_1_25,
+				results_STAAR_B_1_1,
+				results_STAAR_A_1_25,
+				results_STAAR_A_1_1,
+				ACAT_O = results_ACAT_O,
+				STAAR_O = results_STAAR_O
+			)
+
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
@@ -537,9 +595,20 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 
 		if(!use_SPA)
 		{
-			results_temp <- c(results_temp,pvalues$cMAC,pvalues$results_STAAR_S_1_25,pvalues$results_STAAR_S_1_1,
-			                  pvalues$results_STAAR_B_1_25,pvalues$results_STAAR_B_1_1,pvalues$results_STAAR_A_1_25,
-			                  pvalues$results_STAAR_A_1_1,pvalues$results_ACAT_O,pvalues$results_STAAR_O)
+
+			results_temp = c(
+				results_temp,
+				cMAC = pvalues$cMAC,
+				results_STAAR_S_1_25,
+				results_STAAR_S_1_1,
+				results_STAAR_B_1_25,
+				results_STAAR_B_1_1,
+				results_STAAR_A_1_25,
+				results_STAAR_A_1_1,
+				ACAT_O = results_ACAT_O,
+				STAAR_O = results_STAAR_O
+			)
+
 		}else
 		{
 			results_temp <- c(results_temp,pvalues$cMAC,
@@ -593,18 +662,31 @@ coding <- function(chr,gene_name,genofile,obj_nullmodel,genes,
 			{
 				if(!use_SPA)
 				{
+
+					results_save = results
+
+					# results = results_save[,c(1:5, which(endsWith(colnames(results_save), "_1")), (ncol(results_save)-3):ncol(results_save))]
+					results = results_save
+
 					results_m <- c(results[1,],rep(0,6))
 					names(results_m)[(length(results_m)-5):length(results_m)] <- c("SKAT(1,25)-Disruptive","SKAT(1,1)-Disruptive","Burden(1,25)-Disruptive","Burden(1,1)-Disruptive","ACAT-V(1,25)-Disruptive","ACAT-V(1,1)-Disruptive")
-					results_m[(length(results_m)-5):length(results_m)] <- results[2,c("SKAT(1,25)","SKAT(1,1)","Burden(1,25)","Burden(1,1)","ACAT-V(1,25)","ACAT-V(1,1)")]
-					apc_num <- (length(results_m)-19)/6
-					p_seq <- c(1:apc_num,1:apc_num+(apc_num+1),1:apc_num+2*(apc_num+1),1:apc_num+3*(apc_num+1),1:apc_num+4*(apc_num+1),1:apc_num+5*(apc_num+1),(6*apc_num+9):(6*apc_num+14))
-					results_m["STAAR-O"] <- CCT(as.numeric(results_m[6:length(results_m)][p_seq]))
-					results_m["STAAR-S(1,25)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num,6*apc_num+9)]))
-					results_m["STAAR-S(1,1)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num+(apc_num+1),6*apc_num+10)]))
-					results_m["STAAR-B(1,25)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num+2*(apc_num+1),6*apc_num+11)]))
-					results_m["STAAR-B(1,1)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num+3*(apc_num+1),6*apc_num+12)]))
-					results_m["STAAR-A(1,25)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num+4*(apc_num+1),6*apc_num+13)]))
-					results_m["STAAR-A(1,1)"] <- CCT(as.numeric(results_m[6:length(results_m)][c(1:apc_num+5*(apc_num+1),6*apc_num+14)]))
+
+					idx = lapply(paste0(c("SKAT(1,25)","SKAT(1,1)","Burden(1,25)","Burden(1,1)","ACAT-V(1,25)","ACAT-V(1,1)"), "_"), function(x) which(startsWith(colnames(results), x)))
+					results_m[(length(results_m)-5):length(results_m)] <- unlist(lapply(idx, function(x) CCT(as.numeric(results[2,x]))))
+
+					# apc_num <- (length(results_m)-19)/6
+					# p_seq <- c(1:apc_num,1:apc_num+(apc_num+1),1:apc_num+2*(apc_num+1),1:apc_num+3*(apc_num+1),1:apc_num+4*(apc_num+1),1:apc_num+5*(apc_num+1),(6*apc_num+9):(6*apc_num+14))
+					# results_m["STAAR-O"] <- CCT(as.numeric(results_m[6:length(results_m)][p_seq]))
+
+					idx = lapply(paste0(c("SKAT(1,25)","SKAT(1,1)","Burden(1,25)","Burden(1,1)","ACAT-V(1,25)","ACAT-V(1,1)")), function(x) which(startsWith(colnames(results), x)))
+					results_m["STAAR-O"] = CCT(as.numeric(results_m[unlist(idx)]))
+
+					results_m["STAAR-S(1,25)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "SKAT(1,25)"))]))
+					results_m["STAAR-S(1,1)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "SKAT(1,1)"))]))
+					results_m["STAAR-B(1,25)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "Burden(1,25)"))]))
+					results_m["STAAR-B(1,1)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "Burden(1,1)"))]))
+					results_m["STAAR-A(1,25)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "ACAT-V(1,25)"))]))
+					results_m["STAAR-A(1,1)"] = CCT(as.numeric(results_m[which(startsWith(names(results_m), "ACAT-V(1,1)"))]))
 
 					results_ds <- c()
 					results_ds <- rbind(results_ds,results[2,])

@@ -60,7 +60,7 @@ Gene_Centric_Coding <- function(chr,gene_name,category=c("all_categories","plof"
 
 	if(category=="all_categories")
 	{
-		results <- coding1(chr,gene_name,genofile,obj_nullmodel,genes,
+		results <- coding(chr,gene_name,genofile,obj_nullmodel,genes,
 		                  rare_maf_cutoff=rare_maf_cutoff,rv_num_cutoff=rv_num_cutoff,
 		                  QC_label=QC_label,variant_type=variant_type,geno_missing_imputation=geno_missing_imputation,
 		                  Annotation_dir=Annotation_dir,Annotation_name_catalog=Annotation_name_catalog,

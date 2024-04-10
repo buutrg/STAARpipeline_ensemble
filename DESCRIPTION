@@ -1,4 +1,4 @@
-Package: STAARpipeline_ensemble
+Package: STAARpipelineEnsemble
 Type: Package
 Title: STAARpipeline for Analyzing Whole-Genome/Whole-Exome Sequencing Data
 Version: 0.9.7
